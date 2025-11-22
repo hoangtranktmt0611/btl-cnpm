@@ -10,10 +10,37 @@ export default function LoginPage() {
   const [guestName, setGuestName] = useState("");
   const [isGuestMode, setIsGuestMode] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert(`Tên đăng nhập: ${username}\nMật khẩu: ${password}`);
-  };
+  const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch("http://localhost:8080/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (!res.ok) throw new Error("Server error");
+
+    const data = await res.json();
+    localStorage.setItem("userId", data.ID);
+
+    if (data.success) {
+      alert(`Đăng nhập thành công! Vai trò: ${data.role}`);
+      if(data.role == "ADMIN") window.location.href = "/Admin/dashboard";
+      if(data.role == "STUDENT") window.location.href = "/Sinhvien/dashboard";
+      if(data.role == "TUTOR") window.location.href = "/Tutor/dashboard";
+       // chuyển hướng vào trang chính
+    } else {
+      alert(data.message);
+    }
+  } catch (err: any) {
+    console.error(err);
+    alert("Không thể kết nối tới server!");
+  }
+};
+
+
 
   const handleHCMUTLogin = () => {
     if (!username || !password) {
@@ -119,12 +146,20 @@ export default function LoginPage() {
               </div>
 
               <button
-                type="button"
-                onClick={handleHCMUTLogin}
+                type="submit"
+                onClick={handleLogin}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg font-semibold transition-all"
               >
                 Đăng nhập
               </button>
+              <button
+                type="button"
+                onClick={handleHCMUTLogin}
+                className="w-full bg-gray-600 hover:bg-gray-700 text-white py-2.5 rounded-lg font-semibold transition-all"
+              >
+                Đăng nhập SSO HCMUT
+              </button>
+
             </form>
 
             <div className="flex items-center my-6">

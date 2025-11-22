@@ -1,7 +1,6 @@
-// app/Tutor/my-classes/page.tsx
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
 
@@ -9,16 +8,12 @@ interface ClassCardProps {
     courseName: string;
     courseCode: string;
     classId: string;
+    tutorName: string;
+    tutorMSCB: string;
 }
 
-const MOCK_CLASS_DATA: ClassCardProps[] = [
-    { courseName: 'Công nghệ Phần mềm', courseCode: '(CO3001)', classId: 'CO3001' },
-    { courseName: 'Lập trình hướng đối tượng', courseCode: '(CO2002)', classId: 'CO2002' },
-    { courseName: 'Cấu trúc dữ liệu', courseCode: '(CO2003)', classId: 'CO2003' },
-];
-
-// Component Thẻ Lớp học (Giống của Sinh viên)
-const ClassCard: React.FC<ClassCardProps> = ({ courseName, courseCode, classId }) => (
+// Component Thẻ Lớp học
+const ClassCard: React.FC<ClassCardProps> = ({ courseName, courseCode, classId, tutorName, tutorMSCB }) => (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
         <div className="p-4 border-b">
             <div className="flex items-start space-x-4">
@@ -36,9 +31,8 @@ const ClassCard: React.FC<ClassCardProps> = ({ courseName, courseCode, classId }
         
         <div className="p-4">
             <h3 className="text-lg font-semibold text-blue-600">{courseName} {courseCode}</h3>
-            <p className="text-sm text-gray-500 mt-1">MSCB: 2011234 (Yatzilín)</p> 
+            <p className="text-sm text-gray-500 mt-1">MSCB: {tutorMSCB} ({tutorName})</p> 
             <div className="mt-4 flex space-x-3 text-sm">
-                {/* Link đến trang chi tiết của Tutor */}
                 <Link href={`/Tutor/my-classes/${classId}`} className="text-blue-600 hover:underline">
                     Xem chi tiết
                 </Link>
@@ -50,6 +44,31 @@ const ClassCard: React.FC<ClassCardProps> = ({ courseName, courseCode, classId }
 );
 
 export default function MyClassesPage() {
+    const [classes, setClasses] = useState<ClassCardProps[]>([]);
+
+    useEffect(() => {
+        const userId = Number(localStorage.getItem("userId")); // lấy từ login
+        if (!userId) return;
+        const fetchClasses = async (userId : number) => {
+            try {
+                const res = await fetch("http://localhost:8080/api/tutor/get_list_class", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userId}) // thay bằng id user login
+                });
+
+                if (!res.ok) throw new Error("Server error");
+
+                const data: ClassCardProps[] = await res.json();
+                setClasses(data);
+            } catch (err) {
+                console.error("Fetch classes failed:", err);
+            }
+        };
+
+        fetchClasses(userId);
+    }, []);
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -65,10 +84,9 @@ export default function MyClassesPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {MOCK_CLASS_DATA.map((classItem, index) => (
+                {classes.map((classItem, index) => (
                     <ClassCard key={index} {...classItem} />
                 ))}
-                {/* Thêm các thẻ khác nếu cần */}
             </div>
 
             <div className="flex justify-between items-center pt-4 border-t">

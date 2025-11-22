@@ -45,7 +45,7 @@ const SidebarAdmin: React.FC<SidebarProps> = ({ activeItem }) => {
         <div className="bg-blue-600 p-2 rounded mr-2">
             <span className="text-white font-bold text-lg">BS</span>
         </div>
-        <span className="text-lg font-semibold text-gray-800 leading-tight">Hệ Thống Tutor<br/>Admin Portal</span>
+        <span className="text-lg font-semibold text-gray-800 leading-tight">Tutor Support<br/>System</span>
       </div>
 
       <nav className="flex-1 p-4 space-y-1">

@@ -1,78 +1,60 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import Link from 'next/link';
-import { Search, ChevronLeft, ChevronRight } from 'lucide-react';
-
-interface ClassCardProps {
-    courseName: string;
-    courseCode: string;
-    classId: string;
-    tutorName: string;
-    tutorMSCB: string;
-}
-
-// Component Thẻ Lớp học
-const ClassCard: React.FC<ClassCardProps> = ({ courseName, courseCode, classId, tutorName, tutorMSCB }) => (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-        <div className="p-4 border-b">
-            <div className="flex items-start space-x-4">
-                <div className="w-16 h-16 bg-amber-50 p-2 rounded-lg border flex flex-wrap content-start shrink-0">
-                    {[...Array(8)].map((_, i) => (
-                         <div key={i} className={`w-1/4 h-1/4 ${i % 2 === 0 ? 'bg-amber-600' : 'bg-gray-600'}`}></div>
-                    ))}
-                </div>
-                <div>
-                    <p className="font-bold text-gray-800 text-sm">Color Styles</p>
-                    <p className="text-xs text-gray-600">Let's learn about colors, color contrast...</p>
-                </div>
-            </div>
-        </div>
-        
-        <div className="p-4">
-            <h3 className="text-lg font-semibold text-blue-600">{courseName} {courseCode}</h3>
-            <p className="text-sm text-gray-500 mt-1">MSCB: {tutorMSCB} ({tutorName})</p> 
-            <div className="mt-4 flex space-x-3 text-sm">
-                <Link href={`/Tutor/my-classes/${classId}`} className="text-blue-600 hover:underline">
-                    Xem chi tiết
-                </Link>
-                <span className="text-gray-400">|</span>
-                <button className="text-gray-600 hover:underline">Tài liệu</button>
-            </div>
-        </div>
-    </div>
-);
+import { Search, ChevronLeft, ChevronRight, FileText, Users, PenLine } from 'lucide-react';
 
 export default function MyClassesPage() {
-    const [classes, setClasses] = useState<ClassCardProps[]>([]);
+    const [data, setData] = useState<any>(null);
+    const cardsPerRow = 3;
 
+    const [selectedRows, setSelectedRows] = useState(1); 
+    const [currentPage, setCurrentPage] = useState(1);
+    
     useEffect(() => {
-        const userId = Number(localStorage.getItem("userId")); // lấy từ login
-        if (!userId) return;
-        const fetchClasses = async (userId : number) => {
-            try {
-                const res = await fetch("http://localhost:8080/api/tutor/get_list_class", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ userId}) // thay bằng id user login
-                });
+        fetch("/api/Tutor/my-classes")
+            .then((res) => res.json())
+            .then((json) => {
+                setData(json);
 
-                if (!res.ok) throw new Error("Server error");
-
-                const data: ClassCardProps[] = await res.json();
-                setClasses(data);
-            } catch (err) {
-                console.error("Fetch classes failed:", err);
-            }
-        };
-
-        fetchClasses(userId);
+                if (json && json.totalCard > 0) {
+                    const maxRows = Math.ceil(json.totalCard / cardsPerRow);
+                    setSelectedRows(maxRows);
+                }
+            }); 
     }, []);
 
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedRows]);
+
+    if (!data) {
+        return <p>Đang tải dữ liệu...</p>;
+    }
+
+    const totalCards = data.card.length;
+    const maxRows = Math.ceil(data.totalCard / cardsPerRow); // Tổng số hàng thực tế
+    
+    const cardsPerPage = selectedRows * cardsPerRow;
+    const totalPages = Math.ceil(totalCards / cardsPerPage);
+
+    const startIndex = (currentPage - 1) * cardsPerPage;
+    const endIndex = startIndex + cardsPerPage;
+    const visibleCards = data.card.slice(startIndex, endIndex);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 bg-white py-6 px-12 rounded-[10px] shadow-[0_4px_3px_rgba(0,0,0,0.2)] mt-3">
+            {/* Header */}
             <div className="flex justify-between items-center">
-                 <h2 className="text-2xl font-bold text-gray-800">Tổng quan về các lớp học</h2>
+                <h2 className="text-[25px] font-bold text-[#2D3135]">Tổng quan về các lớp học</h2>
                 <div className="flex items-center border border-gray-300 rounded-md bg-white p-2 w-72 shadow-sm">
                     <Search className="w-5 h-5 text-gray-500 mr-2" />
                     <input
@@ -83,26 +65,76 @@ export default function MyClassesPage() {
                 </div>
             </div>
 
+            {/* Cards grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {classes.map((classItem, index) => (
-                    <ClassCard key={index} {...classItem} />
+                {visibleCards.map((s: any) => (
+                    <div
+                        key={s.classId}
+                        className="bg-white rounded-lg shadow-[0px_0px_3px_rgba(0,0,0,0.4)] overflow-hidden cursor-pointer"
+                    >
+                        <div className="h-25 w-full bg-[#4BA4E3]" />
+                        <div className="p-4 mt-[-3px]">
+                            <h3 className="text-lg font-semibold text-[#211C37]">
+                                {s.courseName} ({s.courseCode})
+                            </h3>
+                            <div className="flex items-center gap-6 mt-1">
+                                <div className="flex items-center gap-2">
+                                    <FileText className="text-gray-400" size={15} />
+                                    <span className="text-sm text-gray-500">{s.totalLecture} Bài giảng</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <Users className="text-gray-400" size={15} />
+                                    <span className="text-sm text-gray-500">{s.totalStudent} Sinh viên</span>
+                                </div>
+                            </div>
+
+                            <div className="w-[30%] flex items-center justify-between bg-[#4BA4E3] px-3 py-2 rounded-[7px] mt-3 hover:bg-[#2B82BF]">
+                                <PenLine className="text-white" size={12} />
+                                <Link href={`/Tutor/my-classes/${s.classId}`} className="text-white text-xs">
+                                    Xem chi tiết
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
                 ))}
             </div>
 
+            {/* Footer */}
             <div className="flex justify-between items-center pt-4 border-t">
                 <div className="flex items-center space-x-2 text-sm text-gray-600">
                     <span>Hiển thị</span>
-                    <select className="p-1 border rounded-md">
-                        <option>3</option>
+                    <select
+                        value={selectedRows}
+                        onChange={(e) => setSelectedRows(Number(e.target.value))}
+                        className="p-1 border rounded-md cursor-pointer"
+                    >
+                        {Array.from({ length: maxRows }, (_, i) => i + 1).map((num) => (
+                            <option key={num} value={num}>
+                                {num}
+                            </option>
+                        ))}
                     </select>
                     <span>hàng</span>
                 </div>
+
                 <div className="flex items-center space-x-2">
-                    <button className="p-2 border rounded-md text-gray-500 hover:bg-gray-200" disabled>
+                    <button
+                        onClick={handlePrevPage}
+                        className={`p-2 border rounded-md ${currentPage === 1 ? "text-gray-300" : "text-gray-600 hover:bg-gray-200"}`}
+                        disabled={currentPage === 1}
+                    >
                         <ChevronLeft className="w-5 h-5" />
                     </button>
-                    <span className="px-3 py-1 bg-blue-600 text-white rounded-md text-sm">1</span>
-                    <button className="p-2 border rounded-md text-gray-500 hover:bg-gray-200" disabled>
+
+                    <span className="px-3 py-1 bg-[#4BA4E3] text-white rounded-md text-sm">
+                        {currentPage}
+                    </span>
+
+                    <button
+                        onClick={handleNextPage}
+                        className={`p-2 border rounded-md ${currentPage === totalPages ? "text-gray-300" : "text-gray-600 hover:bg-gray-200"}`}
+                        disabled={currentPage === totalPages}
+                    >
                         <ChevronRight className="w-5 h-5" />
                     </button>
                 </div>

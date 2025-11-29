@@ -1,71 +1,47 @@
-// app/Tutor/layout.tsx
 'use client';
-
 import React from 'react';
-import SidebarTutor from '@/components/SidebarTutor'; // Import Sidebar MỚI
-import AccountDropdown from '@/components/AccountDropdown';
-import NotificationDropdown from '@/components/NotificationDropdown';
+import Sidebar from "./components/Sidebar";
+import Header from "./components/Header";
 import { usePathname } from 'next/navigation';
+
 
 // Hàm helper để xác định mục active và tiêu đề
 const getPathDetails = (pathname: string) => {
-    if (pathname.includes('/dashboard')) {
+    if (pathname.includes('/Dashboard')) {
         return { activeItem: 'Bảng điều khiển', title: 'Bảng điều khiển' };
     }
-    if (pathname.includes('/schedule')) {
+    if (pathname.includes('/Schedule')) {
         return { activeItem: 'Lịch dạy', title: 'Lịch dạy' };
     }
     if (pathname.includes('/my-classes')) {
-        if (pathname.split('/').length > 3) { // /Tutor/my-classes/[classId]
+        // Xử lý trang chi tiết
+        if (pathname.split('/').length > 3) { // /Sinhvien/my-classes/[classId]
             return { activeItem: 'Lớp học của tôi', title: 'Chi tiết lớp học' };
         }
         return { activeItem: 'Lớp học của tôi', title: 'Lớp học của tôi' };
     }
-     if (pathname.includes('/register-class')) {
-         if (pathname.split('/').length > 3) { // /Tutor/register-class/[classId]
-            return { activeItem: 'Đăng ký lớp học', title: 'Tạo lịch học' };
-        }
+    if (pathname.includes('/register-class')) {
         return { activeItem: 'Đăng ký lớp học', title: 'Đăng ký lớp học' };
     }
     if (pathname.includes('/tin-nhan')) {
         return { activeItem: 'Tin nhắn', title: 'Tin nhắn' };
     }
-    return { activeItem: '', title: 'Tutor Support System' }; 
+    return { activeItem: '', title: 'Tutor Support System' }; // Trang mặc định
 };
 
-export default function TutorLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    const pathname = usePathname();
-    const { activeItem, title } = getPathDetails(pathname);
+export default function TutorLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const { activeItem, title } = getPathDetails(pathname);
 
-    return (
-        <div className="flex min-h-screen bg-gray-100">
-            {/* 1. Sidebar (Luôn hiển thị) */}
-            <SidebarTutor activeItem={activeItem} />
-            
-            {/* 2. Nội dung chính (Thay đổi theo trang) */}
-            <div className="flex-1 flex flex-col overflow-hidden">
-                
-                {/* Header (Luôn hiển thị) */}
-                <header className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
-                    <h1 className="text-xl font-bold text-gray-800">
-                        {title}
-                    </h1>
-                    
-                    <div className="flex items-center space-x-3">
-                        <NotificationDropdown />
-                        <AccountDropdown userName="Yatzilín" />
-                    </div>
-                </header>
-
-                {/* Nội dung trang (page.tsx) sẽ được render ở đây */}
-                <main className="flex-1 overflow-y-auto p-8">
-                    {children}
-                </main>
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex bg-[#F5F8FF] min-h-screen">
+      <div className="w-[14%]">
+        <Sidebar activeItem={activeItem} />
+      </div>
+      <div className="p-3 flex-1">
+        <Header />
+        <main className="">{children}</main>
+      </div>
+    </div>
+  );
 }

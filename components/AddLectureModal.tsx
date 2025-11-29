@@ -13,13 +13,13 @@ const AddLectureModal: React.FC<AddLectureModalProps> = ({ isOpen, onClose }) =>
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg relative">
+    <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-[10px] shadow-xl p-6 w-full max-w-lg relative">
         <button 
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
           onClick={onClose}
         >
-          <X className="w-5 h-5" />
+          <X className="w-5 h-5 cursor-pointer" />
         </button>
 
         <h2 className="text-xl font-semibold mb-2">Thêm bài giảng/tài liệu mới</h2>
@@ -43,7 +43,7 @@ const AddLectureModal: React.FC<AddLectureModalProps> = ({ isOpen, onClose }) =>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700">Loại tài liệu <span className="text-red-500">*</span></label>
-            <select className="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+            <select className="mt-1 block w-full p-2 border border-gray-300 rounded-md cursor-pointer">
                 <option>PDF Document</option>
                 <option>Video Link</option>
                 <option>External Link</option>
@@ -54,7 +54,7 @@ const AddLectureModal: React.FC<AddLectureModalProps> = ({ isOpen, onClose }) =>
              <label className="block text-sm font-medium text-gray-700">Tải lên tài liệu</label>
              <input 
                 type="file"
-                className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-[#4BA4E3] file:text-sm file:font-semibold file:bg-white file:text-[#4BA4E3] hover:file:bg-[#EBF7FF] file:cursor-pointer"
              />
           </div>
 
@@ -62,13 +62,13 @@ const AddLectureModal: React.FC<AddLectureModalProps> = ({ isOpen, onClose }) =>
             <button 
               type="button" 
               onClick={onClose}
-              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+              className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 cursor-pointer"
             >
               Hủy
             </button>
             <button 
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className="px-4 py-2 bg-[#4BA4E3] text-white rounded-md hover:bg-[#227FC2] cursor-pointer"
             >
               Thêm tài liệu
             </button>

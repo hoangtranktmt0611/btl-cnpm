@@ -9,24 +9,25 @@ import UserProfileModal from '@/components/UserProfileModal';
 // --- CƠ SỞ DỮ LIỆU GIẢ (MOCK DB) ---
 // Thông tin người dùng
 const MOCK_PEOPLE_DB: { [key: string]: { id: number; sender: string } } = {
-    '1': { id: 1, sender: 'Nguyễn Văn An' },
-    '2': { id: 2, sender: 'Trần Thị Bình' },
-    '3': { id: 3, sender: 'Lê Hoàng Châu' },
+    '1': { id: 1, sender: 'Nguyễn Văn A' },
+    '2': { id: 2, sender: 'Trần Thị B' },
+    '3': { id: 3, sender: 'Lê Hoàng C' },
 };
 
 // Lịch sử chat (khác nhau cho mỗi người)
-const MOCK_HISTORY_DB: { [key: string]: { id: number; text: string; sender: 'tutor' | 'student'; time: string }[] } = {
+const MOCK_HISTORY_DB: { [key: string]: { id: number; text: string; sender: 'student' | 'tutor'; time: string }[] } = {
     '1': [
-        { id: 1, text: 'Em chào thầy ạ', sender: 'student', time: '14:30' },
-        { id: 2, text: 'Em có câu hỏi về bài tập tuần này ạ', sender: 'student', time: '14:30' },
-        { id: 3, text: 'Cụ thể là bài 3 phần tích phân, em không hiểu cách làm', sender: 'student', time: '14:33' },
+        { id: 1, text: 'Chào thầy ạ', sender: 'student', time: '14:20' },
+        { id: 2, text: 'Chào em, có chuyện gì thế', sender: 'tutor', time: '14:22' },
+        { id: 3, text: 'Em có câu hỏi về bài tập tuần này ạ', sender: 'student', time: '14:30' },
+        { id: 4, text: 'Cụ thể là bài 3 phần tích phân, em không hiểu cách làm', sender: 'student', time: '14:31' },
     ],
     '2': [
-        { id: 1, text: 'Thầy cho em xin tài liệu tham khảo môn CSDL nhé ạ.', sender: 'student', time: 'Hôm qua' },
+        { id: 1, text: 'Thầy có thể gửi slide bài giảng không.', sender: 'student', time: 'Hôm qua' },
         { id: 2, text: 'Ok em, thầy đã gửi qua email nhé.', sender: 'tutor', time: 'Hôm qua' },
     ],
     '3': [
-        { id: 1, text: 'Vâng, em sẽ sửa lại phần đó.', sender: 'student', time: '2 ngày trước' },
+        { id: 1, text: 'Cảm ơn thầy đã giúp em.', sender: 'student', time: '2 ngày trước' },
     ],
 };
 // ------------------------------------
@@ -92,10 +93,10 @@ const ChatWindow: React.FC<{ recipientName: string; chatHistory: any[] }> = ({ r
                 {/* Lịch sử tin nhắn (ĐỘNG) */}
                 <div className="flex-1 overflow-y-auto p-6 space-y-4">
                     {chatHistory.map(msg => (
-                        <div key={msg.id} className={`flex ${msg.sender === 'student' ? 'justify-end' : 'justify-start'}`}>
-                            <div className={`max-w-xs md:max-w-md p-3 rounded-lg shadow-sm text-sm ${msg.sender === 'student' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-gray-200 text-gray-800 rounded-tl-none'}`}>
+                        <div key={msg.id} className={`flex ${msg.sender === 'tutor' ? 'justify-end' : 'justify-start'}`}>
+                            <div className={`max-w-xs md:max-w-md p-3 rounded-lg shadow-sm text-sm ${msg.sender === 'tutor' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-gray-200 text-gray-800 rounded-tl-none'}`}>
                                 <p>{msg.text}</p>
-                                <span className={`text-xs mt-1 block ${msg.sender === 'student' ? 'text-blue-200' : 'text-gray-500'} text-right`}>{msg.time}</span>
+                                <span className={`text-xs mt-1 block ${msg.sender === 'tutor' ? 'text-blue-200' : 'text-gray-500'} text-right`}>{msg.time}</span>
                             </div>
                         </div>
                     ))}

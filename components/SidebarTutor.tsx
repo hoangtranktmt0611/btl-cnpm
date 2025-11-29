@@ -41,7 +41,7 @@ const SidebarTutor: React.FC<SidebarProps> = ({ activeItem }) => {
           return (
             <Link 
               key={item.name} 
-              href={item.href}  
+              href={item.href} 
               className={`
                 flex items-center px-3 py-3 rounded-lg transition-colors duration-150 
                 ${isActive 

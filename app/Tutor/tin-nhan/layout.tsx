@@ -9,9 +9,9 @@ import { Search } from 'lucide-react';
 // --- Dữ liệu Mock cho Danh sách Chat ---
 // (Bạn nên lấy danh sách này từ API trong thực tế)
 const MOCK_MESSAGES_LIST = [
-    { id: 1, sender: 'Nguyễn Văn An', lastMessage: 'Em đã gửi bài tập...', time: '10:30 AM', unread: 1 },
-    { id: 2, sender: 'Trần Thị Bình', lastMessage: 'Thầy cho em xin tài liệu...', time: 'Hôm qua', unread: 0 },
-    { id: 3, sender: 'Lê Hoàng Châu', lastMessage: 'Vâng, em sẽ sửa lại...', time: '2 ngày trước', unread: 0 },
+    { id: 1, sender: 'Nguyễn Văn A', lastMessage: 'Cụ thể là bài 3 phần tích phân, em không hiểu cách làm', time: '14:31', unread: 1 },
+    { id: 2, sender: 'Trần Thị B', lastMessage: 'Ok em, thầy đã gửi qua email nhé.', time: 'Hôm qua', unread: 0 },
+    { id: 3, sender: 'Lê Hoàng C', lastMessage: 'Cảm ơn thầy đã giúp em.', time: '2 ngày trước', unread: 0 },
 ];
 
 // --- Component Sidebar Chat ---
@@ -36,7 +36,7 @@ const ChatSidebar = () => {
             <div className="overflow-y-auto flex-1">
                 {MOCK_MESSAGES_LIST.map((chat) => {
                     // Tạo link động
-                    const href = `/Sinhvien/tin-nhan/${chat.id}`;
+                    const href = `/Tutor/tin-nhan/${chat.id}`;
                     // Kiểm tra xem link có đang active không
                     const isActive = pathname === href;
 
@@ -77,7 +77,7 @@ export default function TinNhanLayout({
 }) {
     return (
         // Bố cục 2 cột (Sidebar + Nội dung)
-        <div className="h-[calc(100vh-140px)] flex border border-gray-200 rounded-lg shadow-xl overflow-hidden -m-8">
+        <div className="mt-3 h-[calc(100vh-140px)] flex rounded-[10px] shadow-[0_4px_3px_rgba(0,0,0,0.2)] overflow-hidden">
             
             {/* Cột trái: Danh sách cuộc trò chuyện */}
             <ChatSidebar />

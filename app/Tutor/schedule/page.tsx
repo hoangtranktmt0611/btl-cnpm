@@ -15,6 +15,9 @@ export default function SchedulePage() {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [view, setView] = useState<"dayGridMonth" | "timeGridWeek" | "timeGridDay">("dayGridMonth");
 
+  const handleEventClick = (clickInfo: any) => {
+     alert(`Sự kiện: ${clickInfo.event.title}`);
+  };
   // Lấy dữ liệu mock từ API giả
   useEffect(() => {
     fetch("/api/Tutor/Schedule")
@@ -128,8 +131,11 @@ export default function SchedulePage() {
           headerToolbar={false}
           height="auto"
           events={events}
-          eventTextColor="#111827"         
+          locale="vi"
+          eventTextColor="#111827"     
+          eventClassNames="!border-0"    
           eventDisplay="block"
+          eventClick={handleEventClick}
           dayCellDidMount={(info) => {
             const dayNumber = info.el.querySelector(".fc-daygrid-day-number") as HTMLElement;
 

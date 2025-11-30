@@ -75,7 +75,7 @@ export default function MyClassesPage() {
                         <div className="h-25 w-full bg-[#4BA4E3]" />
                         <div className="p-4 mt-[-3px]">
                             <h3 className="text-lg font-semibold text-[#211C37]">
-                                {s.courseName} ({s.courseCode})
+                                {s.courseName} ({s.courseCode})                                
                             </h3>
                             <div className="flex items-center gap-6 mt-1">
                                 <div className="flex items-center gap-2">

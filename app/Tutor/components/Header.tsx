@@ -39,7 +39,7 @@ export default function Header() {
         <h1  className="text-lg font-semibold text-gray-800">{pageTitle}</h1>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <NotificationDropdown />
         <AccountDropdown userName="Yatzilín" />
       </div>

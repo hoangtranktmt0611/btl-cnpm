@@ -53,15 +53,15 @@ const RegistrationForm: React.FC = () => {
 
   // Component con: Header Form
   const FormHeader = () => (
-    <div className="bg-blue-600 text-white p-6 rounded-t-lg text-center">
-      <h2 className="text-2xl font-bold">Form đăng ký</h2>
-      <p className="text-sm mt-1">Sinh viên điền thông tin và nhu cầu để đăng ký tham gia chương trình</p>
+    <div className="bg-white border-t-[25px] border-[#003DA5] shadow-[0_4px_3px_rgba(0,0,0,0.2)] rounded-xl px-6 py-3  mb-2">
+      <h2 className="text-[35px] font-bold text-[#003DA5]">Form đăng ký</h2>
+      <p className="text-sm mt-1 text-[#4BA4E3] mb-5">Sinh viên điền thông tin và nhu cầu để đăng ký tham gia chương trình</p>
     </div>
   );
 
   // Component con: Khối Form
   const FormBlock: React.FC<{ title: string; children: React.ReactNode }> = ({ title, children }) => (
-    <div className="bg-white p-6 rounded-lg shadow-md border-t-4 border-blue-500 mt-6">
+    <div className="bg-white border-l-[15px] border-[#4BA4E3] shadow-[0_4px_3px_rgba(0,0,0,0.2)] rounded-xl p-4 space-y-2">
       <h3 className="text-lg font-semibold mb-4">{title}</h3>
       <div className="text-gray-700">
         {children}
@@ -74,10 +74,10 @@ const RegistrationForm: React.FC = () => {
       {/* 4. RENDER MODAL (Nó sẽ tự ẩn/hiện dựa trên state 'isModalOpen') */}
       <SuccessModal isOpen={isModalOpen} onClose={handleCloseModal} />
 
-      <div className="w-full max-w-3xl mx-auto">
+      <div className="mt-3 w-full max-w-3xl mx-auto space-y-5">
         <FormHeader />
 
-        <div className="p-6 bg-white rounded-b-lg shadow-lg">
+        <div className="mt-5 space-y-5">
           
           <FormBlock title="Nhu cầu hỗ trợ">
             <textarea
@@ -117,7 +117,7 @@ const RegistrationForm: React.FC = () => {
           <div className="flex justify-end space-x-3 pt-6 mt-6">
             <button
               onClick={handleSave}
-              className="px-6 py-2 bg-blue-600 text-white font-medium rounded-md shadow-sm hover:bg-blue-700 transition"
+              className="px-6 py-2 bg-[#4BA4E3] text-white font-medium rounded-md shadow-sm hover:bg-blue-700 transition"
             >
               Save Changes
             </button>

@@ -1,7 +1,7 @@
 // components/Sidebar.tsx
 import React from 'react';
 import Link from 'next/link';
-import { Search, Users, Calendar, ListChecks, MessageSquare, PlusSquare } from 'lucide-react'; 
+import { Search, Users, PlusSquare, LayoutDashboard,CalendarDays,MessagesSquare} from 'lucide-react'; 
 
 interface SidebarItem {
   name: string;
@@ -12,10 +12,10 @@ interface SidebarItem {
 const sidebarItems: SidebarItem[] = [
   { name: 'Đăng ký tham gia', icon: PlusSquare, href: '/Sinhvien/dang-ky' }, 
   { name: 'Tìm Tutor', icon: Search, href: '/Sinhvien/tim-tutor' },
-  { name: 'Bảng điều khiển', icon: ListChecks, href: '/Sinhvien/dashboard' },
-  { name: 'Lịch học', icon: Calendar, href: '/Sinhvien/schedule' },
+  { name: 'Bảng điều khiển', icon: LayoutDashboard, href: '/Sinhvien/dashboard' },
+  { name: 'Lịch học', icon: CalendarDays, href: '/Sinhvien/schedule' },
   { name: 'Lớp học của tôi', icon: Users, href: '/Sinhvien/my-classes' },
-  { name: 'Tin nhắn', icon: MessageSquare, href: '/Sinhvien/tin-nhan' },
+  { name: 'Tin nhắn', icon: MessagesSquare, href: '/Sinhvien/tin-nhan' },
 ];
 
 interface SidebarProps {
@@ -24,14 +24,17 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ activeItem }) => {
   return (
-    <div className="flex flex-col w-64 bg-white h-screen border-r border-gray-200 sticky top-0 shrink-0">
-      <div className="flex items-center p-6 border-b border-gray-200">
-        <div className="bg-blue-600 p-2 rounded mr-2">
-            <span className="text-white font-bold text-lg">BS</span>
+    <div className="w-[14%] bg-white shadow-[0_0_10px_rgba(0,0,0,0.2)] h-screen fixed left-0 top-0 flex flex-col">
+      <div className="flex items-center justify-center h-20">
+        <div className="flex items-center gap-2">
+          <img src="/bklogo_transparent.png" alt="Logo" className="w-15 h-17" />
+          <div>
+            <p className="font-bold text-black-700 font-sans">Tutor Support</p>
+            <p className="font-mono text-sm text-gray-500">System</p>
+          </div>
         </div>
-        <span className="text-lg font-semibold text-gray-800 leading-tight">Tutor Support<br/>System</span>
       </div>
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex flex-col gap-1 mt-4 px-3">
         {sidebarItems.map((item) => {
           const isActive = item.name === activeItem;
           return (
@@ -39,22 +42,19 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem }) => {
               key={item.name} 
               href={item.href} 
               className={`
-                flex items-center px-3 py-3 rounded-lg transition-colors duration-150 
+                flex items-center gap-3 px-3 py-2 rounded-lg transition-all 
                 ${isActive 
-                    ? 'bg-blue-500 text-white shadow-md' 
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  ? "bg-[#4BA4E3] text-white"
+                  : "text-gray-600 hover:bg-[#4BA4E3]/80 hover:text-white"
                 }
               `}
             >
-              <item.icon className="w-5 h-5 mr-3" />
+              <item.icon ize={20}/>
               <span className="font-medium">{item.name}</span>
             </Link>
           );
         })}
       </nav>
-      <div className="p-4 border-t border-gray-200">
-        <div className="text-sm text-gray-700">Tên người dùng: Yatzilín</div>
-      </div>
     </div>
   );
 };

@@ -6,6 +6,7 @@ import Sidebar from '@/components/Sidebar';
 import AccountDropdown from '@/components/AccountDropdown';
 import NotificationDropdown from '@/components/NotificationDropdown';
 import { usePathname } from 'next/navigation';
+import { ListIndentIncrease } from 'lucide-react'; 
 
 // Hàm helper để xác định mục active và tiêu đề
 const getPathDetails = (pathname: string) => {
@@ -43,18 +44,21 @@ export default function SinhvienLayout({
     const { activeItem, title } = getPathDetails(pathname);
 
     return (
-        <div className="flex min-h-screen bg-gray-100">
+        <div className="flex bg-[#F5F8FF] min-h-screen">
             {/* 1. Sidebar (Luôn hiển thị) */}
-            <Sidebar activeItem={activeItem} />
+            <div className="w-[14%]">
+                <Sidebar activeItem={activeItem} />
+            </div>
             
             {/* 2. Nội dung chính (Thay đổi theo trang) */}
-            <div className="flex-1 flex flex-col overflow-hidden">
+            <div className="p-3 flex-1">
                 
                 {/* Header (Luôn hiển thị) */}
-                <header className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 shadow-sm sticky top-0 z-10">
-                    <h1 className="text-xl font-bold text-gray-800">
-                        {title}
-                    </h1>
+                <header className="w-full flex items-center justify-between rounded-[10px] shadow-[0_4px_3px_rgba(0,0,0,0.2)] bg-white p-2">
+                    <div className="flex items-center gap-4">
+                        <ListIndentIncrease className="text-gray-600" size={22} />
+                        <h1  className="text-lg font-semibold text-gray-800">{title}</h1>
+                    </div>                    
                     
                     {/* Các icon bên phải Header */}
                     <div className="flex items-center space-x-3">
@@ -64,7 +68,7 @@ export default function SinhvienLayout({
                 </header>
 
                 {/* Nội dung trang (page.tsx) sẽ được render ở đây */}
-                <main className="flex-1 overflow-y-auto p-8">
+                <main className="flex-1">
                     {children}
                 </main>
             </div>

@@ -26,22 +26,23 @@ const MOCK_MAJORS: Major[] = [
 export default function TimTutorPage() {
   return (
     // Bố cục 2 cột
-    <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
-            
-        {/* Cột trái - Danh sách Tutor */}
-        <div className="flex-1">
-            <div className="mb-6">
-                <p className="text-2xl font-semibold text-gray-800">Danh sách Tutor</p>
-                <p className="text-sm text-gray-500">Let's learn about colors, color contrast and color styles...</p>
-            </div>
-            <TutorList tutors={MOCK_TUTORS} />
-        </div>
+    <div className="space-y-6 bg-white py-6 px-12 rounded-[10px] shadow-[0_4px_3px_rgba(0,0,0,0.2)] mt-3">
+      <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">
+              
+          {/* Cột trái - Danh sách Tutor */}
+          <div className="flex-1">
+              <div className="mb-6">
+                  <p className="text-2xl font-semibold text-gray-800">Danh sách Tutor</p>
+              </div>
+              <TutorList tutors={MOCK_TUTORS} />
+          </div>
 
-        {/* Cột phải - Form Tiêu chí */}
-        <div className="w-full lg:w-96 shrink-0">
-            <TutorCriteriaForm availableMajors={MOCK_MAJORS} />
-        </div>
+          {/* Cột phải - Form Tiêu chí */}
+          <div className="w-full lg:w-96 shrink-0">
+              <TutorCriteriaForm availableMajors={MOCK_MAJORS} />
+          </div>
 
+      </div>
     </div>
   );
 }

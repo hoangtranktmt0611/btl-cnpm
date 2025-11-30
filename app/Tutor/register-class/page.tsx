@@ -15,16 +15,20 @@ export default function RegisterClassPage() {
     const [currentPage, setCurrentPage] = useState(1);
     
     useEffect(() => {
-        fetch("/api/Tutor/my-classes")
-            .then((res) => res.json())
-            .then((json) => {
-                setData(json);
+    const userId = localStorage.getItem("userId"); // lấy userId đã login
+        if (!userId) return; // chưa login thì không fetch
 
-                if (json && json.totalCard > 0) {
-                    const maxRows = Math.ceil(json.totalCard / cardsPerRow);
-                    setSelectedRows(maxRows);
-                }
-            }); 
+            fetch("http://localhost:8080/api/tutor/get_classes", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: Number(userId) }),
+        })
+        .then((res) => res.json())
+        .then((classes: any[]) => {
+        setData(classes);
+        const maxRows = Math.ceil(classes.length / cardsPerRow);
+        setSelectedRows(maxRows);
+        });
     }, []);
 
     useEffect(() => {
@@ -35,15 +39,15 @@ export default function RegisterClassPage() {
         return <p>Đang tải dữ liệu...</p>;
     }
 
-    const totalCards = data.card.length;
-    const maxRows = Math.ceil(data.totalCard / cardsPerRow);
-    
+    const totalCards = data.length;
+    const maxRows = Math.ceil(data.length / cardsPerRow);
+
     const cardsPerPage = selectedRows * cardsPerRow;
     const totalPages = Math.ceil(totalCards / cardsPerPage);
 
     const startIndex = (currentPage - 1) * cardsPerPage;
     const endIndex = startIndex + cardsPerPage;
-    const visibleCards = data.card.slice(startIndex, endIndex);
+    const visibleCards = data.slice(startIndex, endIndex);
 
     const handleNextPage = () => {
         if (currentPage < totalPages) setCurrentPage(currentPage + 1);

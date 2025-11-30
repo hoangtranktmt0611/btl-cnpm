@@ -23,7 +23,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
 
   return (
     // Lớp phủ (Overlay)
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-60 flex items-center justify-center z-50 transition-opacity duration-300">
+    <div className="fixed inset-0 bg-black/20 flex items-center justify-center z-50 transition-opacity duration-300">
       
       {/* Nội dung Modal */}
       <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-xs text-center relative transform transition-all scale-100 opacity-100">

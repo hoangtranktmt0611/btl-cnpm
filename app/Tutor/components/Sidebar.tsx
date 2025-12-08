@@ -15,7 +15,7 @@ const menuItems = [
   { name: "Lịch dạy", icon: CalendarDays, href: "/Tutor/Schedule" },
   { name: "Lớp học của tôi", icon: Users, href: "/Tutor/my-classes" },
   { name: "Đăng ký lớp học", icon: GraduationCap, href: "/Tutor/register-class" },
-  { name: "Tin nhắn", icon: MessagesSquare, href: "/Tutor/tin-nhan" },
+  // { name: "Tin nhắn", icon: MessagesSquare, href: "/Tutor/tin-nhan" },
 ];
 
 interface SidebarProps {

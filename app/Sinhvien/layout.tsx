@@ -32,6 +32,10 @@ const getPathDetails = (pathname: string) => {
     if (pathname.includes('/dang-ky')) {
         return { activeItem: 'Đăng ký tham gia', title: 'Đăng ký tham gia' };
     }
+    if (pathname.includes('/lo-trinh')) {
+        return { activeItem: 'Lộ trình học tập', title: 'Lộ trình học tập' };
+    }
+    
     return { activeItem: '', title: 'Tutor Support System' }; // Trang mặc định
 };
 

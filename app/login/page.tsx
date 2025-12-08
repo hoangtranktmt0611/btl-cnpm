@@ -29,7 +29,7 @@ export default function LoginPage() {
       alert(`Đăng nhập thành công! Vai trò: ${data.role}`);
       if(data.role == "ADMIN") window.location.href = "/Admin/dashboard";
       if(data.role == "STUDENT") window.location.href = "/Sinhvien/dashboard";
-      if(data.role == "TUTOR") window.location.href = "/Tutor/dashboard";
+      if(data.role == "TUTOR") window.location.href = "/Tutor/Dashboard";
        // chuyển hướng vào trang chính
     } else {
       alert(data.message);

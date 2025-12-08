@@ -1,7 +1,7 @@
 // components/Sidebar.tsx
 import React from 'react';
 import Link from 'next/link';
-import { Search, Users, PlusSquare, LayoutDashboard,CalendarDays,MessagesSquare} from 'lucide-react'; 
+import { Search, Users, PlusSquare, LayoutDashboard, CalendarDays, MessagesSquare, Map as MapIcon } from 'lucide-react';
 
 interface SidebarItem {
   name: string;
@@ -15,7 +15,8 @@ const sidebarItems: SidebarItem[] = [
   { name: 'Bảng điều khiển', icon: LayoutDashboard, href: '/Sinhvien/dashboard' },
   { name: 'Lịch học', icon: CalendarDays, href: '/Sinhvien/schedule' },
   { name: 'Lớp học của tôi', icon: Users, href: '/Sinhvien/my-classes' },
-  { name: 'Tin nhắn', icon: MessagesSquare, href: '/Sinhvien/tin-nhan' },
+  { name: 'Lộ trình học tập', icon: MapIcon, href: '/Sinhvien/lo-trinh' },
+  // { name: 'Tin nhắn', icon: MessagesSquare, href: '/Sinhvien/tin-nhan' },
 ];
 
 interface SidebarProps {
@@ -49,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ activeItem }) => {
                 }
               `}
             >
-              <item.icon ize={20}/>
+              <item.icon size={20}/>
               <span className="font-medium">{item.name}</span>
             </Link>
           );

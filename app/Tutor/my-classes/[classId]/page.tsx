@@ -14,6 +14,7 @@ import AddLectureModal from '@/components/AddLectureModal';
 import AddScheduleModal from '@/components/AddScheduleModal';
 import SendNotificationModal from '@/components/SendNotificationModal';
 import ManageMaterialsModal from '@/components/ManageMaterialsModal';
+import RateStudentModal from '@/components/RateStudentModal';
 // --- Components Con (Định nghĩa bên trong page) ---
 
 // Sidebar thông tin (CẬP NHẬT với "Hành động nhanh")
@@ -186,7 +187,7 @@ const TabClassSchedule: React.FC<{ schedule: any[] }> = ({ schedule }) => (
 );
 
 // Tab 4: Danh sách Sinh viên (CẬP NHẬT với Tiến độ)
-const TabStudents: React.FC<{ list: any[] }> = ({ list }) => (
+const TabStudents: React.FC<{ list: any[]; onRateClick: (student: any) => void }> = ({ list, onRateClick }) => (
     <div className="bg-white">
         <div className="relative mb-3 text-gray-600">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
@@ -201,20 +202,21 @@ const TabStudents: React.FC<{ list: any[] }> = ({ list }) => (
                     <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Họ và Tên</th>
                     <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Email</th>
                     <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Tiến độ</th>
+                    <th className="px-6 py-3 text-center text-xs font-semibold text-gray-700 uppercase">Hành động</th> 
                 </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
                 {list.map(student => (
                     <tr key={student.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 text-sm font-medium">{student.id}</td>
-                        <td className="px-6 py-4 text-sm">{student.name}</td>
-                        <td className="px-6 py-4 text-sm text-blue-600">{student.email}</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-700">{student.id}</td>
+                        <td className="px-6 py-4 text-sm font-semibold text-gray-800">{student.name}</td>
+                        <td className="px-6 py-4 text-sm text-gray-500">{student.email}</td>
                         <td className="px-6 py-4 text-sm">
                             <div className="flex items-center">
-                                <span className="w-16 mr-2">{student.progress}%</span>
-                                <div className="w-full bg-gray-200 rounded-full h-2">
+                                <span className="w-8 mr-2 text-xs text-gray-500">{student.progress}%</span>
+                                <div className="w-24 bg-gray-200 rounded-full h-1.5">
                                     <div 
-                                        className={`h-2 rounded-full ${
+                                        className={`h-1.5 rounded-full ${
                                             student.progress > 80 ? 'bg-green-500' : 
                                             student.progress > 50 ? 'bg-blue-500' : 'bg-yellow-500'
                                         }`} 
@@ -222,6 +224,15 @@ const TabStudents: React.FC<{ list: any[] }> = ({ list }) => (
                                     ></div>
                                 </div>
                             </div>
+                        </td>
+                        {/* Cột Hành động MỚI */}
+                        <td className="px-6 py-4 text-sm text-center">
+                            <button 
+                                onClick={() => onRateClick(student)}
+                                className="px-3 py-1 bg-[#EBF7FF] text-[#0065A9] border border-[#0065A9]/30 rounded-md text-xs font-medium hover:bg-[#0065A9] hover:text-white transition-colors"
+                            >
+                                Đánh giá
+                            </button>
                         </td>
                     </tr>
                 ))}
@@ -233,12 +244,17 @@ const TabStudents: React.FC<{ list: any[] }> = ({ list }) => (
 // --- Trang Chi tiết chính (CẬP NHẬT VỚI STATE QUẢN LÝ MODAL) ---
 export default function TutorClassDetailPage() {
     const params = useParams(); 
-    const [activeTab, setActiveTab] = useState('lecture'); 
+    const [activeTab, setActiveTab] = useState('list'); // Mặc định vào tab list để test ngay
         
     const [isLectureModalOpen, setIsLectureModalOpen] = useState(false);
     const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
     const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
     const [isManageModalOpen, setIsManageModalOpen] = useState(false);
+    
+    // --- STATE MỚI CHO ĐÁNH GIÁ ---
+    const [isRateModalOpen, setIsRateModalOpen] = useState(false);
+    const [selectedStudent, setSelectedStudent] = useState(null);
+
     const [data, setData] = useState<any>(null);
 
     useEffect(() => {
@@ -249,7 +265,13 @@ export default function TutorClassDetailPage() {
         .catch(() => setData(null));
     }, [params.classId]);
 
-    if (!data) return <p>Đang tải dữ liệu...</p>;
+    // Hàm xử lý khi bấm nút Đánh giá
+    const handleRateClick = (student: any) => {
+        setSelectedStudent(student);
+        setIsRateModalOpen(true);
+    };
+
+    if (!data) return <p className="p-10 text-center">Đang tải dữ liệu...</p>;
 
     const renderTabContent = () => {
         switch (activeTab) {
@@ -260,7 +282,7 @@ export default function TutorClassDetailPage() {
             case 'schedule': 
                 return <TabClassSchedule schedule={data.schedule} />;
             case 'list': 
-                return <TabStudents list={data.list} />;
+                return <TabStudents list={data.list} onRateClick={handleRateClick} />; // Truyền hàm xuống
             default: 
                 return <TabLectures lecture={data.lecture} onOpenLectureModal={() => setIsLectureModalOpen(true)} />;
         }
@@ -277,30 +299,20 @@ export default function TutorClassDetailPage() {
     
     return (
         <>
-            {/* 1. Render tất cả các Modal (Chúng tự ẩn/hiện) */}
-            <AddLectureModal 
-                isOpen={isLectureModalOpen} 
-                onClose={() => setIsLectureModalOpen(false)} 
-            />
-            <AddScheduleModal 
-                isOpen={isScheduleModalOpen} 
-                onClose={() => setIsScheduleModalOpen(false)} 
-            />
-            <SendNotificationModal 
-                isOpen={isNotificationModalOpen} 
-                onClose={() => setIsNotificationModalOpen(false)}
-                courseName={`${data.courseName} (${params.classId})`}
-            />
-            <ManageMaterialsModal 
-                isOpen={isManageModalOpen} 
-                onClose={() => setIsManageModalOpen(false)}
-                onAddNew={() => {
-                    setIsManageModalOpen(false);
-                    setIsLectureModalOpen(true); 
-                }}
+            {/* Các Modal cũ */}
+            <AddLectureModal isOpen={isLectureModalOpen} onClose={() => setIsLectureModalOpen(false)} />
+            <AddScheduleModal isOpen={isScheduleModalOpen} onClose={() => setIsScheduleModalOpen(false)} />
+            <SendNotificationModal isOpen={isNotificationModalOpen} onClose={() => setIsNotificationModalOpen(false)} courseName={`${data.courseName} (${params.classId})`}/>
+            <ManageMaterialsModal isOpen={isManageModalOpen} onClose={() => setIsManageModalOpen(false)} onAddNew={() => { setIsManageModalOpen(false); setIsLectureModalOpen(true); }}/>
+
+            {/* --- MODAL ĐÁNH GIÁ MỚI --- */}
+            <RateStudentModal 
+                isOpen={isRateModalOpen} 
+                onClose={() => setIsRateModalOpen(false)} 
+                student={selectedStudent}
             />
 
-            {/* 2. Render nội dung trang */}
+            {/* Nội dung trang */}
             <div className="bg-white py-6 px-12 rounded-[10px] shadow-[0_4px_3px_rgba(0,0,0,0.2)] mt-3">
                 <div className="flex flex-col lg:flex-row space-y-6 lg:space-y-0 lg:space-x-6">                
                     <div className="flex-1">
